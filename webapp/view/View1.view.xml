@@ -1,0 +1,45 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="ns.project1.controller.View1" displayBlock="true">
+	<Shell id="shell">
+		<App id="app">
+			<pages><Page id="page" title="Goods Movement">
+					<content>
+					<sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" editable="true" layout="ResponsiveGridLayout" id="form0">
+					    <sap.ui.layout.form:content>
+                            <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form1" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
+					        <sap.ui.layout.form:content>
+					            <Label text="Plant" id="label0_1619175447502"/>
+					            <Input width="100%" id="iPlant" fieldWidth="20%" showValueHelp="true"  enabled="true"/>
+					            <Label text="Material" id="label1_1619175447503"/>
+					            <Input width="100%" id="iMatnr" showValueHelp="true"/>
+                                <Label text="From Sloc" id="label4"/>
+					            <Input width="100%" id="iFromSloc" showValueHelp="true"/>
+					            <Label text="To Sloc" id="label5"/>
+                               <Input width="100%" id="iToSloc" showValueHelp="true"/>	
+                                <Label text="Quantity" id="label6"/>
+					            <Input width="100%" id="iQuant" showValueHelp="false"/>
+                                <Input width="20%" id="iUom" showValueHelp="true"/>
+                                </sap.ui.layout.form:content>
+					    </sap.ui.layout.form:SimpleForm><sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core"  editable="true" layout="ResponsiveGridLayout" id="form2" backgroundDesign="Transparent" >
+					        <sap.ui.layout.form:content>
+				           				            
+                            </sap.ui.layout.form:content>
+					    </sap.ui.layout.form:SimpleForm>
+                            </sap.ui.layout.form:content>
+					</sap.ui.layout.form:SimpleForm>
+					</content>
+				<footer>
+				    <Toolbar class="sapContrast sapContrastPlus" width="100%" id="Footer">
+				        <content>
+                         <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" type="Emphasized"
+                        press="onMessagePopoverPress"/>
+                        <Button xmlns="sap.m" type="Accept" text="Post" id="iPost" press= "onPost" activeIcon="sap-icon://system-exit"/>
+                        
+                        </content>
+
+                    </Toolbar>
+				</footer>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>
