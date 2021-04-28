@@ -1,0 +1,13 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:core="sap.ui.core">
+	<ValueHelpDialog
+		title="Unit of measurement"
+		ok=".onValueHelpOkPress"
+		cancel=".onValueHelpCancelPress"
+		afterClose=".onValueHelpAfterClose"
+		key="UOMId"
+		descriptionKey="Unit of measure">
+	</ValueHelpDialog>
+
+</core:FragmentDefinition>

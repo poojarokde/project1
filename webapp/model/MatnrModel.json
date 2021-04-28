@@ -1,0 +1,13 @@
+{
+	"cols": [
+		{
+			"label": "Material",
+			"template": "ProductId",
+			"width": "5rem"
+		},
+		{
+			"label": "Description",
+			"template": "Name"
+		}
+	]
+}
