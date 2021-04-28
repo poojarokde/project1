@@ -8,20 +8,39 @@
                             <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form1" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
 					        <sap.ui.layout.form:content>
 					            <Label text="Plant" id="label0_1619175447502"/>
-					            <Input width="100%" id="iPlant" fieldWidth="20%" showValueHelp="true"  enabled="true"/>
+					            <Input width="50%" id="iPlant" fieldWidth="20%" showValueHelp="true" enabled="true"/>
 					            <Label text="Material" id="label1_1619175447503"/>
-					            <Input width="100%" id="iMatnr" showValueHelp="true"/>
+					            <Input width="50%" id="iMatnr" showValueHelp="true" change="onChange"/>
+                                
                                 <Label text="From Sloc" id="label4"/>
-					            <Input width="100%" id="iFromSloc" showValueHelp="true"/>
+					            <Input width="50%" id="iFromSloc" showValueHelp="true"/>
 					            <Label text="To Sloc" id="label5"/>
-                               <Input width="100%" id="iToSloc" showValueHelp="true"/>	
+                                <Input width="50%" id="iToSloc" showValueHelp="true"/>	
                                 <Label text="Quantity" id="label6"/>
 					            <Input width="100%" id="iQuant" showValueHelp="false"/>
                                 <Input width="20%" id="iUom" showValueHelp="true"/>
                                 </sap.ui.layout.form:content>
-					    </sap.ui.layout.form:SimpleForm><sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core"  editable="true" layout="ResponsiveGridLayout" id="form2" backgroundDesign="Transparent" >
-					        <sap.ui.layout.form:content>
-				           				            
+					    </sap.ui.layout.form:SimpleForm>
+                        <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form2" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
+					        <sap.ui.layout.form:content>	
+                              
+                                <Table noDataText="No data" id="iTab" sticky="ColumnHeaders">	
+                                    <columns>	
+                                        <Column id="column0">	
+                                            <header>	
+                                                <Label text="Descr. of Storage Loc." id="label0"/>	
+                                            </header>	
+                                        </Column>	
+                                        <Column id="column1">	
+                                            <header>	
+                                                <Label text="Storage location" id="label1"/>	
+                                            </header>	
+                                        </Column>	
+                                        <Column id="column2">	
+                                            <header>	
+                                                <Label text="Quantity" id="label2"/>	
+                                            </header>	
+                                        </Column></columns></Table>
                             </sap.ui.layout.form:content>
 					    </sap.ui.layout.form:SimpleForm>
                             </sap.ui.layout.form:content>
@@ -30,9 +49,8 @@
 				<footer>
 				    <Toolbar class="sapContrast sapContrastPlus" width="100%" id="Footer">
 				        <content>
-                         <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" type="Emphasized"
-                        press="onMessagePopoverPress"/>
-                        <Button xmlns="sap.m" type="Accept" text="Post" id="iPost" press= "onPost" activeIcon="sap-icon://system-exit"/>
+                         <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" type="Emphasized" press="onMessagePopoverPress"/>
+                        <Button xmlns="sap.m" type="Accept" text="Post" id="iPost" press="onPost" activeIcon="sap-icon://system-exit"/>
                         </content>
                     </Toolbar>
 				</footer>

@@ -12,10 +12,16 @@ sap.ui.define([
 	 */
     function (Controller, MessagePopover, JSONModel, BindingMode, Message, MessageBox) {
         "use strict";
-        var oMessageManager, oModelM, oViewM;
+        var oMessageManager, oModelM, oViewM, oMaterialInput;
         return Controller.extend("ns.project1.controller.View1", {
-            onInit: function () {               
+            onInit: function () {
+                // access OData model declared in manifest.json file
+
+                var oMetaModel = this.getOwnerComponent().getModel("searchHelp");
+                this.getView().setModel(oMetaModel,"help");
+
                 this._oView = this.getView();
+
                 oViewM = this.getView();
                 // // set message model
                 oMessageManager = sap.ui.getCore().getMessageManager();
@@ -33,8 +39,6 @@ sap.ui.define([
                 });
                 oModelM.setDefaultBindingMode(BindingMode.TwoWay);
                 oViewM.setModel(oModelM);
-
-
             },
             onMessagePopoverPress: function (oEvent) {
                 this._getMessagePopover().openBy(oEvent.getSource());
@@ -49,7 +53,7 @@ sap.ui.define([
             },
             onPost: function (oEvent) {
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
-               oModel.setUseBatch(false);
+                oModel.setUseBatch(false);
                 var oEntry = {
                     Material: "KB54002",
                     Plant: "1400",
@@ -72,7 +76,7 @@ sap.ui.define([
 
                 oModel.create("/gmt311Set", oEntry, {
                     method: "POST",
-                    success: function (oData, oResponse) {                                              
+                    success: function (oData, oResponse) {
                         var hdrMessage = oResponse.headers["sap-message"];
                         var hdrMessageObject = JSON.parse(hdrMessage);
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
@@ -92,7 +96,50 @@ sap.ui.define([
                         );
                     }.bind(this)
                 });
-            }
 
+            },
+            onChange: function (oEvent) {
+                var oInput = oEvent.getSource();
+                var oValue = oInput.getValue();
+
+                if (oValue) {
+                    var oModSloc = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
+                    oModSloc.read("/slocSet('" + oValue + "')/sLocNav", {
+                        success: function (oData) {
+                            var oJSONModel = new sap.ui.model.json.JSONModel(oData);
+                            this._oView.setModel(oJSONModel, "SLOC");
+                            var oMetadata = oJSONModel.getMetadata();
+                            //Get the view for table
+                            var iTab = this.getView().byId("iTab");
+                            //Set Model
+                            iTab.setModel(oJSONModel, "Results");
+
+                            // Set line items dynamically
+                            if (oData && oData.results) {
+                                var aColList = new sap.m.ColumnListItem({
+                                    cells: [
+                                        new sap.m.Text({ text: "{Results>Lgobe}" }),
+                                        new sap.m.Text({ text: "{Results>Lgort}" }),
+                                        new sap.m.Text({ text: "{Results>Labst}" })
+                                    ]
+
+                                });
+                                iTab.bindItems("Results>/results", aColList) // bind rows
+                            }
+                        }.bind(this),
+                        error: function (oResponse) {
+                            var body = JSON.parse(oResponse.response.body);
+                            var errorDetails = body.error.message.value;
+                            var bCompact = !!oViewM.$().closest(".sapUiSizeCompact").length;
+                            MessageBox.error(
+                                errorDetails, {
+                                styleClass: bCompact ? "sapUiSizeCompact" : ""
+                            }
+                            );
+                        }.bind(this)
+
+                    });
+                }
+            }
         });
     });
