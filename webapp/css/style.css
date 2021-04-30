@@ -1,1 +1,22 @@
 /* Enter your custom styles here */
+
+
+th div bdi{
+    font-weight: bold !important;
+}
+
+td .sapMText, th div{
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+td, th{
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.sapMListTbl .sapMText, .sapMListTbl .sapMLabel{
+    font-size: 0.7rem !important;
+    
+
+}

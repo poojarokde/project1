@@ -15,28 +15,8 @@ sap.ui.define([
         var oMessageManager, oModelM, oViewM, oMaterialInput;
         return Controller.extend("ns.project1.controller.View1", {
             onInit: function () {
-                // access OData model declared in manifest.json file
 
-                var oMetaModel = this.getOwnerComponent().getModel("searchHelp");
-                this.getView().setModel(oMetaModel, "help");
                 this._oView = this.getView();
-                var oPlant = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
-                oPlant.read("/gmt311Set", {
-                    success: function (oData, oResponse) {
-                        var data = oData.results[0];
-                        this._oView.byId("iPlant").setValue(data.Plant);
-                        this._oView.byId("iPlant").setEnabled(false);
-                    }.bind(this),
-                    error: function (oResponse) {
-                        // var errMessage = oResponse.headers["sap-message"];
-                        // var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
-                        MessageBox.error(
-                            "Default Plant NOt Found.", {
-                            styleClass: bCompact ? "sapUiSizeCompact" : ""
-                        }
-                        );
-                    }.bind(this)
-                });
 
                 oViewM = this.getView();
                 // // set message model
@@ -60,6 +40,62 @@ sap.ui.define([
                 // this.oColModel = new JSONModel(sap.ui.require.toUrl("ns/project1/model") + "/MatnrModel.json");
                 // this.oMaterialModel = new JSONModel(sap.ui.require.toUrl("sap/opu/odata/sap/YMM_GMT_SRV");
             },
+            onBeforeRendering: function () {
+
+                var oPlant = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
+                oPlant.read("/gmt311Set", {
+                    success: function (oData, oResponse) {
+
+                        // oPlant.attachMetadataLoaded(null, function () {
+                        var oMeta = oPlant.getServiceMetadata();
+                        var headerFields = "";
+                        var field;
+                        for (var i = 0; i < oMeta.dataServices.schema[0].entityType[0].property.length; i++) {
+                            var property = oMeta.dataServices.schema[0].entityType[0].property[i];
+                            field = property.name;
+
+                            var extensions = property.extensions;
+                            for (var a = 0; a < extensions.length; a++) {
+                                var field1 = extensions[a].name;
+                                if (field1 == 'label') {
+                                    headerFields = extensions[a].value;
+                                    if (field == 'Plant') {
+                                        this._oView.byId("Plant").setText(headerFields);
+                                    }
+                                    if (field == 'Material') {
+                                        this._oView.byId("Material").setText(headerFields);
+                                    }
+                                    if (field == 'StgeLoc') {
+                                        this._oView.byId("StgeLoc").setText(headerFields);
+                                    }
+                                    if (field == 'MoveStloc') {
+                                        this._oView.byId("MoveStloc").setText(headerFields);
+                                    }
+                                    if (field == 'EntryQnt') {
+                                        this._oView.byId("EntryQnt").setText(headerFields);
+                                    }
+                                }
+                            }
+
+                        }
+
+
+                        var data = oData.results[0];
+                        this._oView.byId("iPlant").setValue(data.Plant);
+                        this._oView.byId("iPlant").setEnabled(false);
+                    }.bind(this),
+                    error: function (oResponse) {
+                        // var errMessage = oResponse.headers["sap-message"];
+                        // var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+                        MessageBox.error(
+                            "Defalt Plant NOt Found.", {
+                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        }
+                        );
+                    }.bind(this)
+                });
+
+            },
             onMessagePopoverPress: function (oEvent) {
                 this._getMessagePopover().openBy(oEvent.getSource());
             },
@@ -72,6 +108,7 @@ sap.ui.define([
                 return this._oMessagePopover;
             },
             onPost: function (oEvent) {
+
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
                 oModel.setUseBatch(false);
                 var oEntry = {
@@ -85,13 +122,12 @@ sap.ui.define([
                     ITEM_TEXT: ""
                 };
 
-                 // var oEntry = {};
+                // var oEntry = {};
                 // oEntry.Material = this.getView().byId("iMatnr").getValue();
                 // oEntry.Plant = this.getView().byId("iPlant").getValue();
                 // oEntry.StgeLoc = this.getView().byId("iFromSloc").getValue();
                 // oEntry.EntryQnt = this.getView().byId("iQuant").getValue();
-                // oEntry.EntryUom = this.getView().byId("iUom").getValue();
-                // oEntry.MovePlant = this.getView().byId("iPlant").getValue();
+                // oEntry.EntryUom = this.getView().byId("iUom").getValue();               
                 // oEntry.MoveStloc = this.getView().byId("iToSloc").getValue(); 
 
                 oModel.create("/gmt311Set", oEntry, {
@@ -100,11 +136,11 @@ sap.ui.define([
                         var hdrMessage = oResponse.headers["sap-message"];
                         var hdrMessageObject = JSON.parse(hdrMessage);
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
-                        MessageBox.success(
-                            hdrMessageObject.message, {
-                            styleClass: bCompact ? "sapUiSizeCompact" : ""
-                        }
-                        );
+                        // MessageBox.success(
+                        //     hdrMessageObject.message, { // contains success message -> pass in text in footer
+                        //     styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        // }
+                        // );
                     }.bind(this),
                     error: function (oResponse) {
                         var errMessage = oResponse.headers["sap-message"];
@@ -117,8 +153,20 @@ sap.ui.define([
                     }.bind(this)
                 });
 
+                this.getView().byId("iMatnr").setValue(null);
+                this.getView().byId("iFromSloc").setValue(null);
+                this.getView().byId("iToSloc").setValue(null);
+                this.getView().byId("iQuant").setValue(null);
+                this.getView().byId("iUom").setValue(null);
+                var oTab = sap.ui.getCore().byId("iTab");
+                if (oTable.isBound("rows")) {
+
+                    oTable.unbindRows();
+
+                }
             },
             onChange: function (oEvent) {
+
                 var oInput = oEvent.getSource();
                 var oValue = oInput.getValue();
 
@@ -130,9 +178,14 @@ sap.ui.define([
                         success: function (oData) {
                             var oJSONModel = new sap.ui.model.json.JSONModel(oData);
                             this._oView.setModel(oJSONModel, "SLOC");
-                            var oMetadata = oJSONModel.getMetadata();   
+                            var oMetadata = oJSONModel.getMetadata();
                             //Set Model
-                            iTab.setModel(oJSONModel, "Results");                           
+                            iTab.setModel(oJSONModel, "Results");
+                          
+                            
+                            this.byId("Mat_desc").setText(oData.results[0].Maktx);
+                            this.byId("iUom").setText(oData.results[0].Meins);
+                            this.byId("iUom").setEnabled(false)
                             // Set line items dynamically
                             if (oData && oData.results) {
                                 var aColList = new sap.m.ColumnListItem({
@@ -142,17 +195,15 @@ sap.ui.define([
                                         new sap.m.Text({ text: "{Results>Labst}" })
                                     ]
                                 });
-                              
                                 iTab.bindItems("Results>/results", aColList) // bind rows
-                                
 
-                               
+
                             }
                         }.bind(this),
                         error: function (oResponse) {
                             var body = JSON.parse(oResponse.response.body);
                             var errorDetails = body.error.message.value;
-                           
+
                             var bCompact = !!oViewM.$().closest(".sapUiSizeCompact").length;
                             MessageBox.error(
                                 errorDetails, {
@@ -160,19 +211,14 @@ sap.ui.define([
                             }
                             );
                         }.bind(this)
-                          
                     });
-                iTab.bindProperty("visible", "true");
-                iTab.setGrowing("true");
-                iTab.setGrowingScrollToLoad("true");
+                    iTab.bindProperty("visible", "true");
                 }
             },
             onMatnrHelpRequested: function () {
-                // var aCols = this.oColModel.getData().cols;
-
                 this._oValueHelpDialog = sap.ui.xmlfragment("ns.project1.view.MatnrSearch", this);
                 this.getView().addDependent(this._oValueHelpDialog);
-                	this._oValueHelpDialog.open();
+                this._oValueHelpDialog.open();
             },
             //     this._oValueHelpDialog.getTableAsync().then(function (oTable) {
             //         oTable.setModel(this.oProductsModel);
@@ -198,19 +244,19 @@ sap.ui.define([
             //     this._oValueHelpDialog.open();
             // },
 
-               onSlocHelpRequested: function () {
+            onSlocHelpRequested: function () {
                 // var aCols = this.oColModel.getData().cols;
 
                 this._oValueHelpDialog = sap.ui.xmlfragment("ns.project1.view.slocSearch", this);
                 this.getView().addDependent(this._oValueHelpDialog);
-                	this._oValueHelpDialog.open();
+                this._oValueHelpDialog.open();
             },
-               onUOMHelpRequested: function () {
+            onUOMHelpRequested: function () {
                 // var aCols = this.oColModel.getData().cols;
 
                 this._oValueHelpDialog = sap.ui.xmlfragment("ns.project1.view.UOMSearch", this);
                 this.getView().addDependent(this._oValueHelpDialog);
-                	this._oValueHelpDialog.open();
+                this._oValueHelpDialog.open();
             },
             onValueHelpOkPress: function (oEvent) {
                 // var aTokens = oEvent.getParameter("tokens");

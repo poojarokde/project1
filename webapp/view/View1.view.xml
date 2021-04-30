@@ -7,18 +7,18 @@
 					    <sap.ui.layout.form:content>
                             <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form1" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
 					        <sap.ui.layout.form:content>
-					            <Label text="Plant" id="label0_1619175447502"/>
+					            <Label  id="Plant"/>
 					            <Input width="50%" id="iPlant" fieldWidth="20%" showValueHelp="true" enabled="true"/>
-					            <Label text="Material" id="label1_1619175447503"/>
+					            <Label  id="Material"/>
 					            <Input width="100%" id="iMatnr" showValueHelp="true" change="onChange" valueHelpRequest=".onMatnrHelpRequested"/>
-					            <Input xmlns="sap.m" value="" id="input0" width="100%" editable="false"/>                               
-                                <Label text="From Sloc" id="label4"/>
+					            <Text xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns="sap.m" id="Mat_desc"/>                               
+                                <Label  id="StgeLoc"/>
 					            <Input width="50%" id="iFromSloc" showValueHelp="true" valueHelpRequest=".onSlocHelpRequested"/>
-					            <Label text="To Sloc" id="label5"/>
+					            <Label  id="MoveStloc"/>
                                 <Input width="50%" id="iToSloc" showValueHelp="true" valueHelpRequest=".onSlocHelpRequested"/>	
-                                <Label text="Quantity" id="label6"/>
+                                <Label  id="EntryQnt"/>
 					            <Input width="100%" id="iQuant" showValueHelp="false"/>
-                                <Input width="20%" id="iUom" showValueHelp="true" valueHelpRequest=".onUOMHelpRequested" editable="false"/>
+                                <Input width="20%" id="iUom" showValueHelp="true" valueHelpRequest=".onUOMHelpRequested"/>
                                 </sap.ui.layout.form:content>
 					    </sap.ui.layout.form:SimpleForm>
                         <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form2" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
