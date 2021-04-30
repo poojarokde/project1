@@ -85,6 +85,15 @@ sap.ui.define([
                     ITEM_TEXT: ""
                 };
 
+                 // var oEntry = {};
+                // oEntry.Material = this.getView().byId("iMatnr").getValue();
+                // oEntry.Plant = this.getView().byId("iPlant").getValue();
+                // oEntry.StgeLoc = this.getView().byId("iFromSloc").getValue();
+                // oEntry.EntryQnt = this.getView().byId("iQuant").getValue();
+                // oEntry.EntryUom = this.getView().byId("iUom").getValue();
+                // oEntry.MovePlant = this.getView().byId("iPlant").getValue();
+                // oEntry.MoveStloc = this.getView().byId("iToSloc").getValue(); 
+
                 oModel.create("/gmt311Set", oEntry, {
                     method: "POST",
                     success: function (oData, oResponse) {
@@ -115,16 +124,15 @@ sap.ui.define([
 
                 if (oValue) {
                     var oModSloc = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
+                    //Get the view for table        
+                    var iTab = this.getView().byId("iTab");
                     oModSloc.read("/slocSet('" + oValue + "')/sLocNav", {
                         success: function (oData) {
                             var oJSONModel = new sap.ui.model.json.JSONModel(oData);
                             this._oView.setModel(oJSONModel, "SLOC");
-                            var oMetadata = oJSONModel.getMetadata();
-                            //Get the view for table
-                            var iTab = this.getView().byId("iTab");
+                            var oMetadata = oJSONModel.getMetadata();   
                             //Set Model
-                            iTab.setModel(oJSONModel, "Results");
-
+                            iTab.setModel(oJSONModel, "Results");                           
                             // Set line items dynamically
                             if (oData && oData.results) {
                                 var aColList = new sap.m.ColumnListItem({
@@ -133,14 +141,18 @@ sap.ui.define([
                                         new sap.m.Text({ text: "{Results>Lgort}" }),
                                         new sap.m.Text({ text: "{Results>Labst}" })
                                     ]
-
                                 });
+                              
                                 iTab.bindItems("Results>/results", aColList) // bind rows
+                                
+
+                               
                             }
                         }.bind(this),
                         error: function (oResponse) {
                             var body = JSON.parse(oResponse.response.body);
                             var errorDetails = body.error.message.value;
+                           
                             var bCompact = !!oViewM.$().closest(".sapUiSizeCompact").length;
                             MessageBox.error(
                                 errorDetails, {
@@ -148,8 +160,11 @@ sap.ui.define([
                             }
                             );
                         }.bind(this)
-
+                          
                     });
+                iTab.bindProperty("visible", "true");
+                iTab.setGrowing("true");
+                iTab.setGrowingScrollToLoad("true");
                 }
             },
             onMatnrHelpRequested: function () {
