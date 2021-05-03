@@ -180,11 +180,10 @@ sap.ui.define([
                             this._oView.setModel(oJSONModel, "SLOC");
                             var oMetadata = oJSONModel.getMetadata();
                             //Set Model
-                            iTab.setModel(oJSONModel, "Results");
-                          
+                            iTab.setModel(oJSONModel, "Results");                         
                             
                             this.byId("Mat_desc").setText(oData.results[0].Maktx);
-                            this.byId("iUom").setText(oData.results[0].Meins);
+                            this.byId("iUom").setValue(oData.results[0].Meins);                           
                             this.byId("iUom").setEnabled(false)
                             // Set line items dynamically
                             if (oData && oData.results) {
@@ -196,8 +195,6 @@ sap.ui.define([
                                     ]
                                 });
                                 iTab.bindItems("Results>/results", aColList) // bind rows
-
-
                             }
                         }.bind(this),
                         error: function (oResponse) {

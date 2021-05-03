@@ -19,44 +19,6 @@
       "env": {
         "run.config": "{\"handlerId\":\"fiori_tools\",\"runnableId\":\"/home/user/projects/project1\"}"
       }
-    },
-    {
-      "name": "project1",
-      "cwd": "${workspaceFolder}",
-      "runtimeArgs": [
-        "run-script",
-        "start"
-      ],
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "windows": {
-        "runtimeExecutable": "npm.cmd"
-      },
-      "console": "internalConsole",
-      "internalConsoleOptions": "openOnSessionStart",
-      "env": {
-        "run.config": "{\"handlerId\":\"fiori_tools\",\"runnableId\":\"/home/user/projects/project1\"}"
-      }
-    },
-    {
-      "name": "project1",
-      "cwd": "${workspaceFolder}",
-      "runtimeArgs": [
-        "run-script",
-        "start"
-      ],
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "npm",
-      "windows": {
-        "runtimeExecutable": "npm.cmd"
-      },
-      "console": "internalConsole",
-      "internalConsoleOptions": "openOnSessionStart",
-      "env": {
-        "run.config": "{\"handlerId\":\"fiori_tools\",\"runnableId\":\"/home/user/projects/project1\"}"
-      }
     }
   ]
 }
