@@ -158,12 +158,9 @@ sap.ui.define([
                 this.getView().byId("iToSloc").setValue(null);
                 this.getView().byId("iQuant").setValue(null);
                 this.getView().byId("iUom").setValue(null);
+                this.getView().byId("Mat_desc").setText(null)
                 var oTab = sap.ui.getCore().byId("iTab");
-                if (oTable.isBound("rows")) {
-
-                    oTable.unbindRows();
-
-                }
+               oTab.setModel(new sap.ui.model.json.JSONModel({data: []}));;
             },
             onChange: function (oEvent) {
 
@@ -186,16 +183,16 @@ sap.ui.define([
                             this.byId("iUom").setValue(oData.results[0].Meins);                           
                             this.byId("iUom").setEnabled(false)
                             // Set line items dynamically
-                            if (oData && oData.results) {
-                                var aColList = new sap.m.ColumnListItem({
-                                    cells: [
-                                        new sap.m.Text({ text: "{Results>Lgobe}" }),
-                                        new sap.m.Text({ text: "{Results>Lgort}" }),
-                                        new sap.m.Text({ text: "{Results>Labst}" })
-                                    ]
-                                });
-                                iTab.bindItems("Results>/results", aColList) // bind rows
-                            }
+                            // if (oData && oData.results) {
+                            //     var aColList = new sap.m.ColumnListItem({
+                            //         cells: [
+                            //             new sap.m.Text({ text: "{Results>Lgobe}" }),
+                            //             new sap.m.Text({ text: "{Results>Lgort}" }),
+                            //             new sap.m.Text({ text: "{Results>Labst}" })
+                            //         ]
+                            //     });
+                            //     iTab.bindItems("Results>/results", aColList) // bind rows
+                            // }
                         }.bind(this),
                         error: function (oResponse) {
                             var body = JSON.parse(oResponse.response.body);

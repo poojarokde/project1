@@ -24,8 +24,9 @@
                         <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form2" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
 					        <sap.ui.layout.form:content>	
                               
-                                <Table noDataText="No data" id="iTab" sticky="ColumnHeaders" growingThreshold="2" visible="false" growingScrollToLoad="true">	
-                                    <columns>	
+                                <Table noDataText="No data" items = "Results>/d/results" id="iTab" sticky="ColumnHeaders" growingThreshold="2" visible="false" growingScrollToLoad="true">	
+                                    
+                                    <columns >	
                                         <Column id="column0">	
                                             <header>	
                                                 <Label text="Descr. of Storage Loc." id="label0"/>	
@@ -40,7 +41,13 @@
                                             <header>	
                                                 <Label text="Quantity" id="label2"/>	
                                             </header>	
-                                        </Column></columns></Table>
+                                        </Column></columns>
+                                        <ColumnListItem>
+                                        <cells>
+                                                <Text text = "{Results>Lgobe}"/>
+                                        </cells>
+                                        </ColumnListItem>
+                                        </Table>
                             </sap.ui.layout.form:content>
 					    </sap.ui.layout.form:SimpleForm>
                             </sap.ui.layout.form:content>
