@@ -1,17 +1,21 @@
 <core:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:core="sap.ui.core">
-<TableSelectDialog id="grpSearchHelp" noDataText="No Data Found" title="Storage Location" search="handleSlocSearch" growing="true" growingThreshold="15" confirm="handleSlocClose" cancel="handleSlocClose" items="{slocSearch>/d/results}">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+<TableSelectDialog id="grpSlocHelp" noDataText="No Data Found" title="Storage Location" search="handleSlocSearch" growing="true" growingThreshold="15" confirm="handleSlocClose"  cancel="handleSlocClose" items="{slocSearch>/d/results}">
         <ColumnListItem>
             <cells>
                 <Text text="{slocSearch>Lgort}"/>
             </cells>
+            <cells>
+                <Text text="{slocSearch>Lgobe}"/>
+            </cells>
         </ColumnListItem>
         <columns>
             <Column>
-                <header>
                     <Text text="Storage Location"/>
-                </header>
+            </Column>
+            <Column>
+                    <Text text="Description"/>
             </Column>
         </columns>
     </TableSelectDialog> 

@@ -12,7 +12,7 @@ sap.ui.define([
 	 */
     function (Controller, MessagePopover, JSONModel, BindingMode, Message, MessageBox) {
         "use strict";
-        var oMessageManager, oModelM, oViewM, oMaterialInput,oSuccess;
+        var oMessageManager, oModelM, oViewM, oMaterialInput, oPlant;
         return Controller.extend("ns.project1.controller.View1", {
             onInit: function () {
 
@@ -34,11 +34,7 @@ sap.ui.define([
                     Dummy: ""
                 });
                 oModelM.setDefaultBindingMode(BindingMode.TwoWay);
-                oViewM.setModel(oModelM);
-
-                // this._oMultiInput = this.getView().byId("iMatnr");
-                // this.oColModel = new JSONModel(sap.ui.require.toUrl("ns/project1/model") + "/MatnrModel.json");
-                // this.oMaterialModel = new JSONModel(sap.ui.require.toUrl("sap/opu/odata/sap/YMM_GMT_SRV");
+                oViewM.setModel(oModelM);               
             },
             onBeforeRendering: function () {
 
@@ -46,7 +42,6 @@ sap.ui.define([
                 oPlant.read("/gmt311Set", {
                     success: function (oData, oResponse) {
 
-                        // oPlant.attachMetadataLoaded(null, function () {
                         var oMeta = oPlant.getServiceMetadata();
                         var headerFields = "";
                         var field;
@@ -85,8 +80,7 @@ sap.ui.define([
                         this._oView.byId("iPlant").setEnabled(false);
                     }.bind(this),
                     error: function (oResponse) {
-                        // var errMessage = oResponse.headers["sap-message"];
-                        // var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+                        
                         MessageBox.error(
                             "Defalt Plant NOt Found.", {
                             styleClass: bCompact ? "sapUiSizeCompact" : ""
@@ -98,7 +92,7 @@ sap.ui.define([
             },
             onMessagePopoverPress: function (oEvent) {
                 this._getMessagePopover().openBy(oEvent.getSource());
-                 var oText =  this.getView().byId("success").setVisible(false);
+                var oText = this.getView().byId("success").setVisible(false);
             },
             _getMessagePopover: function () {
                 // create popover lazily (singleton)
@@ -108,52 +102,43 @@ sap.ui.define([
                 }
                 return this._oMessagePopover;
             },
-            onClear: function(){
+            onClear: function () {
                 this.getView().byId("iMatnr").setValue(null);
                 this.getView().byId("iFromSloc").setValue(null);
                 this.getView().byId("iToSloc").setValue(null);
                 this.getView().byId("iQuant").setValue(null);
                 this.getView().byId("iUom").setValue(null);
-                this.getView().byId("Mat_desc").setText(null)
-                this.getView().byId("iTab").getModel().refresh(true);
-                // oTab.setVisible(false);  
+                this.getView().byId("Mat_desc").setText(null);
+                var iTab = this.getView().byId("iTab");
+                iTab.setVisible(false);
+                var oModel = this.getView();
+                oModel.getModel("Results").setData(null);
+               var oModel1 = this.getView().getModel("message");
+                oModel1.setData(null);
+               this.getView().byId("success").setText(null);    
+               this.getView().byId("logs").setVisible(false);           
+                
             },
             onPost: function (oEvent) {
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
-                oModel.setUseBatch(false);
-                var oEntry = {
-                    Material: "KB54002",
-                    Plant: "1400",
-                    StgeLoc: "0001",
-                    EntryQnt: "1.00",
-                    EntryUom: "EA",
-                    MovePlant: "1400",
-                    MoveStloc: "STOP",
-                    ITEM_TEXT: ""
-                };
+                oModel.setUseBatch(false);           
 
-                // var oEntry = {};
-                // oEntry.Material = this.getView().byId("iMatnr").getValue();
-                // oEntry.Plant = this.getView().byId("iPlant").getValue();
-                // oEntry.StgeLoc = this.getView().byId("iFromSloc").getValue();
-                // oEntry.EntryQnt = this.getView().byId("iQuant").getValue();
-                // oEntry.EntryUom = this.getView().byId("iUom").getValue();               
-                // oEntry.MoveStloc = this.getView().byId("iToSloc").getValue(); 
+                var oEntry = {};
+                oEntry.Material = this.getView().byId("iMatnr").getValue();
+                oEntry.Plant = this.getView().byId("iPlant").getValue();
+                oEntry.StgeLoc = this.getView().byId("iFromSloc").getValue();
+                oEntry.EntryQnt = this.getView().byId("iQuant").getValue();
+                oEntry.EntryUom = this.getView().byId("iUom").getValue();               
+                oEntry.MoveStloc = this.getView().byId("iToSloc").getValue(); 
 
                 oModel.create("/gmt311Set", oEntry, {
                     method: "POST",
                     success: function (oData, oResponse) {
                         var hdrMessage = oResponse.headers["sap-message"];
                         var hdrMessageObject = JSON.parse(hdrMessage);
-                        var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
-                        // oSuccess = hdrMessageObject.message;
-                        var oText =  this.getView().byId("success").setText(hdrMessageObject.message);
-                        oText.setVisible(true);
-                        // MessageBox.success(
-                        //     hdrMessageObject.message, { // contains success message -> pass in text in footer
-                        //     styleClass: bCompact ? "sapUiSizeCompact" : ""
-                        // }
-                        // );
+                        var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;                        
+                        var oText = this.getView().byId("success").setText(hdrMessageObject.message);
+                        oText.setVisible(true);                        
                     }.bind(this),
                     error: function (oResponse) {
                         var errMessage = oResponse.headers["sap-message"];
@@ -164,20 +149,17 @@ sap.ui.define([
                         }
                         );
                     }.bind(this)
-                });
-
-                 var oText =  this.getView().byId("success").setText(oSuccess);
-                oText.setVisible(true);
+                });               
             },
             onChange: function (oEvent) {
 
-                if(oEvent){
-               var oInput = oEvent.getSource();
-                var oValue = oInput.getValue();
+                if (oEvent) {
+                    var oInput = oEvent.getSource();
+                    var oValue = oInput.getValue();
                 }
-               if(!oValue){
-                   oValue = this.getView().byId("iMatnr").getValue();
-               }
+                if (!oValue) {
+                    oValue = this.getView().byId("iMatnr").getValue();
+                }
 
                 if (oValue) {
                     var oModSloc = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
@@ -188,29 +170,14 @@ sap.ui.define([
                             var oJSONModel = new sap.ui.model.json.JSONModel(oData);
                             this._oView.setModel(oJSONModel, "SLOC");
                             var oMetadata = oJSONModel.getMetadata();
-                            //Set Model
-                            // iTab.setModel(oJSONModel, "Results");                         
+                            //Set Model                                                   
                             this._oView.setModel(oJSONModel, "Results");
-                            
-                            this.byId("Mat_desc").setText(oData.results[0].Maktx);                        
+
+                            this.byId("Mat_desc").setText(oData.results[0].Maktx);
                             this.byId("iUom").setValue(oData.results[0].Meins);
-                            this.byId("iUom").setEnabled(false)
-                            // Set line items dynamically
-                            // if (oData && oData.results) {
-                            //     var aColList = new sap.m.ColumnListItem({
-                            //         cells: [
-                            //             new sap.m.Text({ text: "{Results>Lgobe}" }),
-                            //             new sap.m.Text({ text: "{Results>Lgort}" }),
-                            //             new sap.m.Text({ text: "{Results>Labst}" })
-                            //         ]
-                            //     });
-                            //     iTab.bindItems("Results>/results", aColList) // bind rows
-                            // }
+                            this.byId("iUom").setEnabled(false)                          
                         }.bind(this),
                         error: function (oResponse) {
-                            // // var body = JSON.parse(oResponse.response.body);
-                            // var errorDetails = body.error.message.value;
-
                             var bCompact = !!oViewM.$().closest(".sapUiSizeCompact").length;
                             MessageBox.error(
                                 errorDetails, {
@@ -219,9 +186,10 @@ sap.ui.define([
                             );
                         }.bind(this)
                     });
-                    iTab.bindProperty("visible", "true");
+                    iTab.setVisible(true);
                 }
             },
+            
             onSearchHelp: function (oEvent) {
                 //This code was generated by the layout editor.
                 var skip = 0; // Start pointing of record
@@ -231,8 +199,9 @@ sap.ui.define([
                     this._oDialog = sap.ui.xmlfragment("ns.project1.view.MatnrSearch", this);
                 }
                 this._oDialog.setBusy(true);
-                var sServiceUrl = "/sap/opu/odata/sap/YF4_MATNR_SRV/Mat0mSet?$format=json&$top=" + top + "&$skip=" + skip + "";
-                // var sServiceUrl = "/sap/opu/odata/sap/YMM_GMT_SRV/gmt311Set?$format=json";
+                oPlant = this.getView().byId("iPlant").getValue();
+                var sServiceUrl = "/sap/opu/odata/sap/YF4_ONE_IN_ALL_SRV/Mat1wESet('" + oPlant + "')/matnrNav?$format=json&$top=" + top + "&$skip=" + skip + "";
+               
                 this._oModel = new sap.ui.model.json.JSONModel();
                 this._oModel.loadData(sServiceUrl);
                 this._oModel.attachRequestCompleted(function () {
@@ -243,8 +212,6 @@ sap.ui.define([
                 // toggle compact style
                 jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._oDialog);
                 this._oDialog.open();
-
-
             },
             handleSearch: function (oEvent) {
                 var sValue = oEvent.getParameter("value");
@@ -259,79 +226,50 @@ sap.ui.define([
                     var sValue = aContexts[0].getObject().Matnr;
                     oInput.setValue(sValue);
                     oInput.setValueState(sap.ui.core.ValueState.None);
-                // this.byId("Mat_desc").setText(aContexts[0].getObject().Maktg);
-                 this.onChange();
+                    this.onChange();
                 }
                 oEvent.getSource().getBinding("items").filter([]);
-               
+            },
+            onSlocHelpRequested: function (oEvent) {
+                //This code was generated by the layout editor.
+                this.aTokens = oEvent.getParameter("id");
+                var skip = 0; // Start pointing of record
+                var top = 20; //Size of the record
+                if (!this._pDialog) {
+                    this._pDialog = sap.ui.xmlfragment("ns.project1.view.slocSearch", this);
+                }
+                oPlant = this.getView().byId("iPlant").getValue();
+                var sServiceUrl = "/sap/opu/odata/sap/YF4_ONE_IN_ALL_SRV/HT001lOldSet('" + oPlant + "')/sLocNav?$format=json&$top=" + top + "&$skip=" + skip + "";
+                
+                this._oModel1 = new sap.ui.model.json.JSONModel();
+                this._oModel1.loadData(sServiceUrl);
+                this._oModel1.attachRequestCompleted(function () {
+                    this._pDialog.setBusy(false);
+                    this._pDialog.setModel(this._oModel1, "slocSearch");
+                }, this);
+                this.getView().addDependent(this._pDialog);
+                // toggle compact style
+                jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._pDialog);
+                this._pDialog.open();
+            },
+            handleSlocSearch: function (oEvent) {
+                var sValue = oEvent.getParameter("value");
+                var oFilter = new Filter("Lgort", sap.ui.model.FilterOperator.Contains, sValue);
+                var oBinding = oEvent.getSource().getBinding("items");
+                oBinding.filter([oFilter]);
+            },
+            handleSlocClose: function (oEvent) {
+                var oInput = this.getView().byId(this.aTokens);
+                var aContexts = oEvent.getParameter("selectedContexts");
+                if (aContexts && aContexts.length) {
+                    var sValue = aContexts[0].getObject().Lgort;
+                    oInput.setValue(sValue);
+                    oInput.setValueState(sap.ui.core.ValueState.None);
+                }
+                oEvent.getSource().getBinding("items").filter([]);
+
             }
-
-            // onSlocHelpRequested: function () {
-            //     var oView = this.getView();
-
-            //     if (!this._pValueHelpDialog) {
-            //         this._pValueHelpDialog = Fragment.load({
-            //             id: oView.getId(),
-            //              name:  sap.ui.xmlfragment("ns.project1.view.slocSearch"),
-            //             controller: this
-            //         }).then(function (oValueHelpDialog) {
-            //             oView.addDependent(oValueHelpDialog);
-            //             return oValueHelpDialog;
-            //         });
-            //     }
-            //     this._pValueHelpDialog.then(function (oValueHelpDialog) {
-            //         // this._configValueHelpDialog();
-            //         var sServiceUrl = "/sap/opu/odata/sap/YF4_ONE_IN_ALL_SRV/HT001lOldSet('1400')/sLocNav?$format=json&$top=" + top + "&$skip=" + skip + "";
-                  
-            //         this._oModel1 = new sap.ui.model.json.JSONModel();
-            //         this._oModel1.loadData(sServiceUrl);
-
-            //         oValueHelpDialog.setModel(this._oModel1, "slocSearch");
-
-            //         oValueHelpDialog.open();
-            //     }.bind(this));
-            // }
-            // onSlocHelpRequested: function(oEvent) {
-            //     //This code was generated by the layout editor.
-            //     var skip = 0; // Start pointing of record
-            //     var top = 20; //Size of the record
-            //     if (!this._pDialog) {
-            //         this._pDialog = sap.ui.xmlfragment("ns.project1.view.slocSearch", this);
-            //     }
-            //     // this._pDialog1.setBusy(true);
-            //     var sServiceUrl = "/sap/opu/odata/sap/YF4_ONE_IN_ALL_SRV/HT001lOldSet('1400')/sLocNav?$format=json&$top=" + top + "&$skip=" + skip + "";
-            //     // var sServiceUrl = "/sap/opu/odata/sap/YMM_GMT_SRV/gmt311Set?$format=json";
-            //     this._oModel1 = new sap.ui.model.json.JSONModel();
-            //     this._oModel1.loadData(sServiceUrl);
-            //     this._oModel1.attachRequestCompleted(function () {
-            //         this._pDialog.setBusy(false);
-            //         this._pDialog.setModel(this._oModel1, "slocSearch");
-            //     }, this);
-            //     this.getView().addDependent(oValueDialog);
-            //     // toggle compact style
-            //     jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._pDialog);
-            //     this._pDialog.open();
-
-
-            // },
-            //  handleSlocSearch: function (oEvent) {
-            //     var sValue = oEvent.getParameter("value");
-            //     var oFilter = new Filter("Lgort", sap.ui.model.FilterOperator.Contains, sValue);
-            //     var oBinding = oEvent.getSource().getBinding("items");
-            //     oBinding.filter([oFilter]);
-            // },
-            // handleSlocClose: function (oEvent) {
-            //     var oInput = this.getView().byId(this.getView().createId("iFromSloc"));
-            //     var aContexts = oEvent.getParameter("selectedContexts");
-            //     if (aContexts && aContexts.length) {
-            //         var sValue = aContexts[0].getObject().Lgort;
-            //         oInput.setValue(sValue);
-            //         oInput.setValueState(sap.ui.core.ValueState.None);
-            //     }
-            //     oEvent.getSource().getBinding("items").filter([]);
-            //     // this._pDialog.close();
-            // }
-
+           
 
         });
     });

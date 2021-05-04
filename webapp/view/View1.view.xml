@@ -64,7 +64,7 @@
 				<footer>
 				    <Toolbar class="sapContrast sapContrastPlus" width="100%" id="Footer">
 				        <content>
-                         <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" type="Emphasized" press="onMessagePopoverPress"/>
+                         <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" id="logs" type="Emphasized" press="onMessagePopoverPress"/>
                         <Button xmlns="sap.m" type="Accept" text="Post" id="iPost" press="onPost" activeIcon="sap-icon://system-exit"/>
                         <Button xmlns="sap.m" text="Clear" id="button1" press="onClear"/>
                         <Text xmlns="sap.m" text="Text" id="success" visible="false"/>

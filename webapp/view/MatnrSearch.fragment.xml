@@ -4,13 +4,17 @@
             <cells>
                 <Text text="{MatnrSearch>Matnr}"/>
             </cells>
+            <cells>
+                <Text text="{MatnrSearch>Maktg}"/>
+            </cells>
         </ColumnListItem>
         <columns>
             <Column>
-                <header>
                     <Text text="Material"/>
-                </header>
             </Column>
+            <Column>
+             <Text text="Description"/>
+              </Column>
         </columns>
     </TableSelectDialog>    
 </core:FragmentDefinition>
