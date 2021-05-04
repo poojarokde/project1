@@ -1,14 +1,16 @@
-<core:FragmentDefinition
-	xmlns="sap.ui.comp.valuehelpdialog"
-	xmlns:core="sap.ui.core">
-	<ValueHelpDialog
-		title="Material"
-		ok=".onValueHelpOkPress"
-		cancel=".onValueHelpCancelPress"
-		afterClose=".onValueHelpAfterClose"
-		key="MaterialId"
-		descriptionKey="Material"
-	>
-	</ValueHelpDialog>
-
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+<TableSelectDialog id="grpSearchHelp" noDataText="No Data Found" title="Material" search="handleSearch" growing="true" growingThreshold="15" confirm="handleClose" cancel="handleClose" items="{MatnrSearch>/d/results}">
+        <ColumnListItem>
+            <cells>
+                <Text text="{MatnrSearch>Matnr}"/>
+            </cells>
+        </ColumnListItem>
+        <columns>
+            <Column>
+                <header>
+                    <Text text="Material"/>
+                </header>
+            </Column>
+        </columns>
+    </TableSelectDialog>    
 </core:FragmentDefinition>

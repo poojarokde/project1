@@ -7,26 +7,24 @@
 					    <sap.ui.layout.form:content>
                             <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form1" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
 					        <sap.ui.layout.form:content>
-					            <Label  id="Plant"/>
+					            <Label id="Plant"/>
 					            <Input width="50%" id="iPlant" fieldWidth="20%" showValueHelp="true" enabled="true"/>
-					            <Label  id="Material"/>
-					            <Input width="100%" id="iMatnr" showValueHelp="true" change="onChange" valueHelpRequest=".onMatnrHelpRequested"/>
+					            <Label id="Material"/>
+					            <Input width="100%" id="iMatnr" showValueHelp="true" change="onChange" valueHelpRequest=".onSearchHelp"/>
 					            <Text xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns="sap.m" id="Mat_desc"/>                               
-                                <Label  id="StgeLoc"/>
+                                <Label id="StgeLoc"/>
 					            <Input width="50%" id="iFromSloc" showValueHelp="true" valueHelpRequest=".onSlocHelpRequested"/>
-					            <Label  id="MoveStloc"/>
+					            <Label id="MoveStloc"/>
                                 <Input width="50%" id="iToSloc" showValueHelp="true" valueHelpRequest=".onSlocHelpRequested"/>	
-                                <Label  id="EntryQnt"/>
+                                <Label id="EntryQnt"/>
 					            <Input width="100%" id="iQuant" showValueHelp="false"/>
-                                <Input width="20%" id="iUom" showValueHelp="true" valueHelpRequest=".onUOMHelpRequested"/>
+                                <Input width="20%" id="iUom" />
                                 </sap.ui.layout.form:content>
 					    </sap.ui.layout.form:SimpleForm>
                         <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form2" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
-					        <sap.ui.layout.form:content>	
-                              
-                                <Table noDataText="No data" items = "Results>/d/results" id="iTab" sticky="ColumnHeaders" growingThreshold="2" visible="false" growingScrollToLoad="true">	
-                                    
-                                    <columns >	
+					        <sap.ui.layout.form:content>
+                                <Table noDataText="No data" items="{Results>/results}" id="iTab" sticky="ColumnHeaders" growingThreshold="4" visible="false" growingScrollToLoad="false" growing="true">
+                                    <columns>	
                                         <Column id="column0">	
                                             <header>	
                                                 <Label text="Descr. of Storage Loc." id="label0"/>	
@@ -42,22 +40,35 @@
                                                 <Label text="Quantity" id="label2"/>	
                                             </header>	
                                         </Column></columns>
+                                        <items>
                                         <ColumnListItem>
                                         <cells>
-                                                <Text text = "{Results>Lgobe}"/>
+                                                <Text text="{Results>Lgobe}"/>
+                                        </cells>
+                                          <cells>
+                                                <Text text="{Results>Lgort}"/>
+                                        </cells>
+                                          <cells>
+                                                <Text text="{Results>Labst}"/>
                                         </cells>
                                         </ColumnListItem>
+                                        </items>
                                         </Table>
+                                       
                             </sap.ui.layout.form:content>
 					    </sap.ui.layout.form:SimpleForm>
                             </sap.ui.layout.form:content>
 					</sap.ui.layout.form:SimpleForm>
+                 
 					</content>
 				<footer>
 				    <Toolbar class="sapContrast sapContrastPlus" width="100%" id="Footer">
 				        <content>
                          <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" type="Emphasized" press="onMessagePopoverPress"/>
                         <Button xmlns="sap.m" type="Accept" text="Post" id="iPost" press="onPost" activeIcon="sap-icon://system-exit"/>
+                        <Button xmlns="sap.m" text="Clear" id="button1" press="onClear"/>
+                        <Text xmlns="sap.m" text="Text" id="success" visible="false"/>
+                        
                         </content>
                     </Toolbar>
 				</footer>
