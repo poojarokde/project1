@@ -41,7 +41,7 @@
                                             </header>	
                                         </Column></columns>
                                         <items>
-                                        <ColumnListItem>
+                                        <ColumnListItem id="colList">
                                         <cells>
                                                 <Text text="{Results>Lgobe}"/>
                                         </cells>
@@ -62,14 +62,15 @@
                  
 					</content>
 				<footer>
-				    <Toolbar class="sapContrast sapContrastPlus" width="100%" id="Footer">
-				        <content>
+				    <Toolbar class="sapContrast sapContrastPlus" width="100%" id="Footer" >
+                    <Bar>
+				        <contentRight>
                          <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" id="logs" type="Emphasized" press="onMessagePopoverPress"/>
                         <Button xmlns="sap.m" type="Accept" text="Post" id="iPost" press="onPost" activeIcon="sap-icon://system-exit"/>
-                        <Button xmlns="sap.m" text="Clear" id="button1" press="onClear"/>
+                        <Button xmlns="sap.m" text="Clear" id="button1" type="Reject" press="onClear" />
                         <Text xmlns="sap.m" text="Text" id="success" visible="false"/>
-                        
-                        </content>
+                        </contentRight>                       
+                        </Bar>
                     </Toolbar>
 				</footer>
 				</Page>

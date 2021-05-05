@@ -108,16 +108,26 @@ sap.ui.define([
                 this.getView().byId("iToSloc").setValue(null);
                 this.getView().byId("iQuant").setValue(null);
                 this.getView().byId("iUom").setValue(null);
-                this.getView().byId("Mat_desc").setText(null);
-                var iTab = this.getView().byId("iTab");
-                iTab.setVisible(false);
+                this.getView().byId("Mat_desc").setText(null);                
+                this.getView().byId("success").setText(null);
+                
                 var oModel = this.getView();
                 oModel.getModel("Results").setData(null);
-               var oModel1 = this.getView().getModel("message");
-                oModel1.setData(null);
-               this.getView().byId("success").setText(null);    
-               this.getView().byId("logs").setVisible(false);           
                 
+                var colList = this.getView().byId("colList");
+                colList.unbindCells();
+                
+                var iTab = this.getView().byId("iTab");
+                iTab.setVisible(false);
+
+                var messageProc = sap.ui.getCore().getMessageManager();       
+                messageProc.removeAllMessages();
+
+               var oModel1 = this.getView();                         
+                oModel1.getModel("message").setData(null);                 
+               this.getView().byId("logs").setVisible(false);   
+              
+              
             },
             onPost: function (oEvent) {
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
@@ -151,7 +161,7 @@ sap.ui.define([
                     }.bind(this)
                 });               
             },
-            onChange: function (oEvent) {
+            onChange: function (oEvent) {             
 
                 if (oEvent) {
                     var oInput = oEvent.getSource();
@@ -172,7 +182,6 @@ sap.ui.define([
                             var oMetadata = oJSONModel.getMetadata();
                             //Set Model                                                   
                             this._oView.setModel(oJSONModel, "Results");
-
                             this.byId("Mat_desc").setText(oData.results[0].Maktx);
                             this.byId("iUom").setValue(oData.results[0].Meins);
                             this.byId("iUom").setEnabled(false)                          
@@ -187,7 +196,7 @@ sap.ui.define([
                         }.bind(this)
                     });
                     iTab.setVisible(true);
-                }
+                }              
             },
             
             onSearchHelp: function (oEvent) {
