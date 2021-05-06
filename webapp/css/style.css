@@ -1,8 +1,16 @@
 /* Enter your custom styles here */
 
+th{
+    background-color: #CD2027 !important;
+}
+
+.sapMColumnHeader{
+    padding-top: 10% !important;
+}
 
 th div bdi{
     font-weight: bold !important;
+    color: #ffffff !important;
 }
 
 td .sapMText, th div{
@@ -17,10 +25,45 @@ td, th{
 
 .sapMListTbl .sapMText, .sapMListTbl .sapMLabel{
     font-size: 0.7rem !important;
-    
-
 }
-#success{
-    color:greenyellow
+.sapUiBody {
+    background-color: white !important;
+}
 
+.sapMIBar{
+    background-color: #CD2027 !important;
+}
+.sapMTitle{
+  font-weight: bold !important;
+  color: white !important;
+}
+.sapMBtnInner{
+    border-radius: 5px !important;
+    border-color: white !important;
+}
+.sapMShellBrandingBar{
+    background-color:#CD2027  !important;
+} 
+.sapContrast span.sapMBtnInner.sapMBtnAccept{
+    background-color:#CD2027  !important;
+}
+
+html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
+    background-color: #cd2027;
+}
+
+.sapMInputBaseContentWrapper{
+    border-radius: 5px;
+}
+.sapMColumnHeader{
+    padding: 0% !important;    
+}
+.sapMListTbl .sapMText{
+    font-size: 13px !important;
+}
+.sapMSFF{
+    border-radius: 12px;
+}
+.sapMText.sapUiSelectable.sapMTextBreakWord.sapMTextMaxWidth.sapMColumnHeaderContent{
+    color:white !important;
 }

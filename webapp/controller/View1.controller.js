@@ -4,13 +4,14 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/BindingMode",
     "sap/ui/core/message/Message",
-    "sap/m/MessageBox"
+    "sap/m/MessageBox",
+    'sap/m/MessageToast'
 
 ],
 	/**
 	 * @param {typeof sap.ui.core.mvc.Controller} Controller
 	 */
-    function (Controller, MessagePopover, JSONModel, BindingMode, Message, MessageBox) {
+    function (Controller, MessagePopover, JSONModel, BindingMode, Message, MessageBox, MessageToast) {
         "use strict";
         var oMessageManager, oModelM, oViewM, oMaterialInput, oPlant;
         return Controller.extend("ns.project1.controller.View1", {
@@ -146,9 +147,11 @@ sap.ui.define([
                     success: function (oData, oResponse) {
                         var hdrMessage = oResponse.headers["sap-message"];
                         var hdrMessageObject = JSON.parse(hdrMessage);
-                        var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;                        
-                        var oText = this.getView().byId("success").setText(hdrMessageObject.message);
-                        oText.setVisible(true);                        
+                        var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;   
+                        MessageToast.show(hdrMessageObject.message);
+                                           
+                        // var oText = this.getView().byId("success").setText(hdrMessageObject.message);
+                        // oText.setVisible(true);                        
                     }.bind(this),
                     error: function (oResponse) {
                         var errMessage = oResponse.headers["sap-message"];

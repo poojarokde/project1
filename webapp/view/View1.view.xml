@@ -18,7 +18,7 @@
                                 <Input width="50%" id="iToSloc" showValueHelp="true" valueHelpRequest=".onSlocHelpRequested"/>	
                                 <Label id="EntryQnt"/>
 					            <Input width="100%" id="iQuant" showValueHelp="false"/>
-                                <Input width="20%" id="iUom" />
+                                <Input width="20%" id="iUom"/>
                                 </sap.ui.layout.form:content>
 					    </sap.ui.layout.form:SimpleForm>
                         <sap.ui.layout.form:SimpleForm xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" id="form2" layout="ResponsiveGridLayout" editable="true" columnsXL="4" maxContainerCols="4">
@@ -62,15 +62,19 @@
                  
 					</content>
 				<footer>
-				    <Toolbar class="sapContrast sapContrastPlus" width="100%" id="Footer" >
+				    <Toolbar width="100%" id="Footer">
+                    
                     <Bar>
-				        <contentRight>
-                         <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" id="logs" type="Emphasized" press="onMessagePopoverPress"/>
-                        <Button xmlns="sap.m" type="Accept" text="Post" id="iPost" press="onPost" activeIcon="sap-icon://system-exit"/>
-                        <Button xmlns="sap.m" text="Clear" id="button1" type="Reject" press="onClear" />
+                        <contentMiddle>
+                            <Image src="../img/Toro.png" height="50px" width="140px"/>
+                        </contentMiddle>
+                       <contentRight>
+                        <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" id="logs" type="Emphasized" press="onMessagePopoverPress"/>
+                        <Button xmlns="sap.m" text="Post" id="iPost" type="Accept" press="onPost" activeIcon="sap-icon://system-exit" tooltip="Post Document"/>
+                        <Button xmlns="sap.m" text="Clear" id="button1" type="Default" press="onClear" tooltip="Clear Fields"/>
                         <Text xmlns="sap.m" text="Text" id="success" visible="false"/>
                         </contentRight>                       
-                        </Bar>
+                    </Bar>
                     </Toolbar>
 				</footer>
 				</Page>
