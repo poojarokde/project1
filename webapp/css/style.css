@@ -3,7 +3,6 @@
 th{
     background-color: #CD2027 !important;
 }
-
 .sapMColumnHeader{
     padding-top: 10% !important;
 }
@@ -64,7 +63,12 @@ html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
 .sapMSFF{
     border-radius: 12px;
 }
+
 .sapMText.sapUiSelectable.sapMTextMaxWidth.sapMColumnHeaderContent{
-    color:white !important;
+    color: white !important;
     font-weight: bold;
+}
+
+.sapMListTblRow{
+    height: 1.5rem !important;
 }
