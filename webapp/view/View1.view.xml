@@ -65,9 +65,9 @@
 				    <Toolbar width="100%" id="Footer">
                     
                     <Bar>
-                        <contentMiddle>
+                        <!-- <contentMiddle>
                             <Image src="../img/Toro.png" height="50px" width="140px"/>
-                        </contentMiddle>
+                        </contentMiddle> -->
                        <contentRight>
                         <Button icon="sap-icon://alert" text="{= ${message>/}.length}" visible="{= ${message>/}.length &gt; 0}" id="logs" type="Emphasized" press="onMessagePopoverPress"/>
                         <Button xmlns="sap.m" text="Post" id="iPost" type="Accept" press="onPost" activeIcon="sap-icon://system-exit" tooltip="Post Document"/>
