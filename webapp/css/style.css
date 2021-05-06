@@ -64,6 +64,7 @@ html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
 .sapMSFF{
     border-radius: 12px;
 }
-.sapMText.sapUiSelectable.sapMTextBreakWord.sapMTextMaxWidth.sapMColumnHeaderContent{
+.sapMText.sapUiSelectable.sapMTextMaxWidth.sapMColumnHeaderContent{
     color:white !important;
+    font-weight: bold;
 }
