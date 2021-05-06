@@ -10,7 +10,7 @@
 					            <Label id="Plant"/>
 					            <Input width="50%" id="iPlant" fieldWidth="20%" showValueHelp="true" enabled="true"/>
 					            <Label id="Material"/>
-					            <Input width="100%" id="iMatnr" showValueHelp="true" change="onChange" valueHelpRequest=".onSearchHelp"/>
+					            <Input width="100%" id="iMatnr" required="true" showValueHelp="true" change="onChange" valueHelpRequest=".onSearchHelp"/>
 					            <Text xmlns:mvc="sap.ui.core.mvc" xmlns:sap.ui.layout.form="sap.ui.layout.form" xmlns:sap.ui.core="sap.ui.core" xmlns="sap.m" id="Mat_desc"/>                               
                                 <Label id="StgeLoc"/>
 					            <Input width="50%" id="iFromSloc" showValueHelp="true" valueHelpRequest=".onSlocHelpRequested"/>

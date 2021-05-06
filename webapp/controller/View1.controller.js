@@ -180,6 +180,15 @@ sap.ui.define([
                     var iTab = this.getView().byId("iTab");
                     oModSloc.read("/slocSet('" + oValue + "')/sLocNav", {
                         success: function (oData) {
+                            var oInput = this.getView().byId(this.getView().createId("iMatnr"));
+                            if (!oData.results.length) {
+                                var oInput = this.getView().byId(this.getView().createId("iMatnr"));
+                                oInput.setValueState(sap.ui.core.ValueState.Error);
+                                oInput.setValueStateText("Material not present in plant.");
+                                this.byId("Mat_desc").setText(null);
+                            } else {
+                                oInput.setValueState(sap.ui.core.ValueState.Success);
+                            }
                             var oJSONModel = new sap.ui.model.json.JSONModel(oData);
                             this._oView.setModel(oJSONModel, "SLOC");
                             var oMetadata = oJSONModel.getMetadata();
@@ -187,7 +196,8 @@ sap.ui.define([
                             this._oView.setModel(oJSONModel, "Results");
                             this.byId("Mat_desc").setText(oData.results[0].Maktx);
                             this.byId("iUom").setValue(oData.results[0].Meins);
-                            this.byId("iUom").setEnabled(false)                          
+                            this.byId("iUom").setEnabled(false)  
+
                         }.bind(this),
                         error: function (oResponse) {
                             var bCompact = !!oViewM.$().closest(".sapUiSizeCompact").length;
