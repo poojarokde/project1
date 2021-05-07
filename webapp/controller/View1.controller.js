@@ -149,10 +149,11 @@ sap.ui.define([
                         var hdrMessageObject = JSON.parse(hdrMessage);
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
                         MessageToast.show(hdrMessageObject.message, {
-                            duration: 5000
+                            duration: 5000                     
                         });
-                        onClear();
-
+                        
+                       var messageProc = sap.ui.getCore().getMessageManager();
+                      messageProc.removeAllMessages();  
                     }.bind(this),
                     error: function (oResponse) {
                         var errMessage = oResponse.headers["sap-message"];
@@ -164,6 +165,7 @@ sap.ui.define([
                         );
                     }.bind(this)
                 });
+                this.onClear();
             },
             onChange: function (oEvent) {
 
