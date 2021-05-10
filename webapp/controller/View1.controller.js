@@ -130,52 +130,20 @@ sap.ui.define([
                 oModel1.getModel("message").setData(null);
                 this.getView().byId("logs").setVisible(false);
 
-
-
-
             },
             onPost: function (oEvent) {
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
                 oModel.setUseBatch(false);
-
                 var oEntry = {};
-               
-                oEntry.Plant  =  this.getView().byId("iPlant").getValue();
-               oEntry.Material = this.getView().byId("iMatnr").getValue();
-                var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
-                if(!oEntry.Material){
-                    oInput1.setValueState(sap.ui.core.ValueState.Error);
-                    oInput1.setValueStateText("Material field cannot be empty.");
-                }            
 
+                oEntry.Plant = this.getView().byId("iPlant").getValue();
+                oEntry.Material = this.getView().byId("iMatnr").getValue();
                 oEntry.StgeLoc = this.getView().byId("iFromSloc").getValue();
-                var oInput3 = this.getView().byId(this.getView().createId("iFromSloc"));
-                if (!oEntry.StgeLoc) {
-                    oInput3.setValueState(sap.ui.core.ValueState.Error);
-                    oInput3.setValueStateText("From storage location field cannot be empty.");
-                }
-
                 oEntry.EntryQnt = this.getView().byId("iQuant").getValue();
-                var oInput4 = this.getView().byId(this.getView().createId("iQuant"));
-                if (!oEntry.EntryQnt) {
-                    oInput4.setValueState(sap.ui.core.ValueState.Error);
-                    oInput4.setValueStateText("Quantity field cannot be empty.");
-                }
-
                 oEntry.EntryUom = this.getView().byId("iUom").getValue();
-                var oInput5 = this.getView().byId(this.getView().createId("iUom"));
-                if (!oEntry.EntryUom) {
-                    oInput5.setValueState(sap.ui.core.ValueState.Error);
-                    oInput5.setValueStateText("Unit field cannot be empty.");
-                }
-
                 oEntry.MoveStloc = this.getView().byId("iToSloc").getValue();
-                var oInput6 = this.getView().byId(this.getView().createId("iToSloc"));
-                if (!oEntry.MoveStloc) {
-                    oInput6.setValueState(sap.ui.core.ValueState.Error);
-                    oInput6.setValueStateText("To Storage location field cannot be empty.");
-                }
 
+                this.onValidate(oEntry);       // Validate fields 
                 oModel.create("/gmt311Set", oEntry, {
                     method: "POST",
                     success: function (oData, oResponse) {
@@ -192,16 +160,43 @@ sap.ui.define([
                     error: function (oResponse) {
                         var errMessage = oResponse.headers["sap-message"];
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
-                        if( oEntry.Material){
-                        MessageBox.error(
-                            "Error occured. Please see the Message Popover", {
-                            styleClass: bCompact ? "sapUiSizeCompact" : ""
+                        if (oEntry.Material) {
+                            MessageBox.error(
+                                "Error occured. Please see the Message Popover", {
+                                styleClass: bCompact ? "sapUiSizeCompact" : ""
+                            }
+                            );
                         }
-                        );
-                    }
                     }.bind(this)
                 });
                 this.onClear();
+            },
+            onValidate: function (oEntry) {
+                var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
+                if (!oEntry.Material) {
+                    oInput1.setValueState(sap.ui.core.ValueState.Error);
+                    oInput1.setValueStateText("Material field cannot be empty.");
+                }
+                var oInput3 = this.getView().byId(this.getView().createId("iFromSloc"));
+                if (!oEntry.StgeLoc) {
+                    oInput3.setValueState(sap.ui.core.ValueState.Error);
+                    oInput3.setValueStateText("From storage location field cannot be empty.");
+                }
+                var oInput4 = this.getView().byId(this.getView().createId("iQuant"));
+                if (!oEntry.EntryQnt) {
+                    oInput4.setValueState(sap.ui.core.ValueState.Error);
+                    oInput4.setValueStateText("Quantity field cannot be empty.");
+                }
+                var oInput5 = this.getView().byId(this.getView().createId("iUom"));
+                if (!oEntry.EntryUom) {
+                    oInput5.setValueState(sap.ui.core.ValueState.Error);
+                    oInput5.setValueStateText("Unit field cannot be empty.");
+                }
+                var oInput6 = this.getView().byId(this.getView().createId("iToSloc"));
+                if (!oEntry.MoveStloc) {
+                    oInput6.setValueState(sap.ui.core.ValueState.Error);
+                    oInput6.setValueStateText("To Storage location field cannot be empty.");
+                }
             },
             onChange: function (oEvent) {
                 var messageProc = sap.ui.getCore().getMessageManager();
@@ -220,7 +215,7 @@ sap.ui.define([
                     oMod.read("/slocSet('" + oValue + "')", {
                         success: function (odata) {
                             var oInput = this.getView().byId(this.getView().createId("iMatnr"));
-                            oInput.setValueState(sap.ui.core.ValueState.Success); 
+                            oInput.setValueState(sap.ui.core.ValueState.Success);
                             this.byId("Mat_desc").setText(odata.Maktx);
                             this.byId("iUom").setValue(odata.Meins);
                             this.byId("iUom").setEnabled(false)
@@ -331,18 +326,18 @@ sap.ui.define([
                 oEvent.getSource().getBinding("items").filter([]);
 
             },
-            setState: function(){
+            setState: function () {
 
-                 var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
-                 oInput1.setValueState(sap.ui.core.ValueState.None);
-                 var oInput2 = this.getView().byId(this.getView().createId("iFromSloc"));
-                 oInput2.setValueState(sap.ui.core.ValueState.None);
-                 var oInput3 = this.getView().byId(this.getView().createId("iToSloc"));
-                 oInput3.setValueState(sap.ui.core.ValueState.None);
-                 var oInput4 = this.getView().byId(this.getView().createId("iQuant"));
-                 oInput4.setValueState(sap.ui.core.ValueState.None);
-                 var oInput5 = this.getView().byId(this.getView().createId("iUom"));
-                 oInput5.setValueState(sap.ui.core.ValueState.None);
+                var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
+                oInput1.setValueState(sap.ui.core.ValueState.None);
+                var oInput2 = this.getView().byId(this.getView().createId("iFromSloc"));
+                oInput2.setValueState(sap.ui.core.ValueState.None);
+                var oInput3 = this.getView().byId(this.getView().createId("iToSloc"));
+                oInput3.setValueState(sap.ui.core.ValueState.None);
+                var oInput4 = this.getView().byId(this.getView().createId("iQuant"));
+                oInput4.setValueState(sap.ui.core.ValueState.None);
+                var oInput5 = this.getView().byId(this.getView().createId("iUom"));
+                oInput5.setValueState(sap.ui.core.ValueState.None);
             }
 
 
