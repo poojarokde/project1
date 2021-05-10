@@ -110,9 +110,7 @@ sap.ui.define([
                 this.getView().byId("iQuant").setValue(null);
                 this.getView().byId("iUom").setValue(null);
                 this.getView().byId("Mat_desc").setText(null);
-                this.getView().byId("success").setText(null);
-                // var oInput = this.getView().byId(this.getViewcreateId("iMatnr"));
-                // oInput.setValueState(sap.ui.core.ValueState.None);().
+                this.getView().byId("success").setText(null);                
                 var oModel = this.getView().getModel("Results");
                 if (oModel) {
                     oModel.setData(null);
@@ -129,6 +127,7 @@ sap.ui.define([
                 var oModel1 = this.getView();
                 oModel1.getModel("message").setData(null);
                 this.getView().byId("logs").setVisible(false);
+                 this.setState();
 
             },
             onPost: function (oEvent) {
@@ -153,9 +152,9 @@ sap.ui.define([
                         MessageToast.show(hdrMessageObject.message, {
                             duration: 5000
                         });
-
                         var messageProc = sap.ui.getCore().getMessageManager();
                         messageProc.removeAllMessages();
+                         this.onClear();
                     }.bind(this),
                     error: function (oResponse) {
                         var errMessage = oResponse.headers["sap-message"];
@@ -167,9 +166,13 @@ sap.ui.define([
                             }
                             );
                         }
+                        else{
+                        var messageProc = sap.ui.getCore().getMessageManager();
+                        messageProc.removeAllMessages();
+                        }
                     }.bind(this)
                 });
-                this.onClear();
+               
             },
             onValidate: function (oEntry) {
                 var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
@@ -208,9 +211,7 @@ sap.ui.define([
                 if (!oValue) {
                     oValue = this.getView().byId("iMatnr").getValue();
                 }
-
                 if (oValue) {
-
                     var oMod = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
                     oMod.read("/slocSet('" + oValue + "')", {
                         success: function (odata) {
