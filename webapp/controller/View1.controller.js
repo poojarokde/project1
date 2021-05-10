@@ -111,10 +111,12 @@ sap.ui.define([
                 this.getView().byId("iUom").setValue(null);
                 this.getView().byId("Mat_desc").setText(null);
                 this.getView().byId("success").setText(null);
-
-                var oModel = this.getView();
-                oModel.getModel("Results").setData(null);
-
+                // var oInput = this.getView().byId(this.getViewcreateId("iMatnr"));
+                // oInput.setValueState(sap.ui.core.ValueState.None);().
+                var oModel = this.getView().getModel("Results");
+                if (oModel) {
+                    oModel.setData(null);
+                }
                 var colList = this.getView().byId("colList");
                 colList.unbindCells();
 
@@ -129,18 +131,50 @@ sap.ui.define([
                 this.getView().byId("logs").setVisible(false);
 
 
+
+
             },
             onPost: function (oEvent) {
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
                 oModel.setUseBatch(false);
 
                 var oEntry = {};
-                oEntry.Material = this.getView().byId("iMatnr").getValue();
-                oEntry.Plant = this.getView().byId("iPlant").getValue();
+               
+                oEntry.Plant  =  this.getView().byId("iPlant").getValue();
+               oEntry.Material = this.getView().byId("iMatnr").getValue();
+                var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
+                if(!oEntry.Material){
+                    oInput1.setValueState(sap.ui.core.ValueState.Error);
+                    oInput1.setValueStateText("Material field cannot be empty.");
+                }            
+
                 oEntry.StgeLoc = this.getView().byId("iFromSloc").getValue();
+                var oInput3 = this.getView().byId(this.getView().createId("iFromSloc"));
+                if (!oEntry.StgeLoc) {
+                    oInput3.setValueState(sap.ui.core.ValueState.Error);
+                    oInput3.setValueStateText("From storage location field cannot be empty.");
+                }
+
                 oEntry.EntryQnt = this.getView().byId("iQuant").getValue();
+                var oInput4 = this.getView().byId(this.getView().createId("iQuant"));
+                if (!oEntry.EntryQnt) {
+                    oInput4.setValueState(sap.ui.core.ValueState.Error);
+                    oInput4.setValueStateText("Quantity field cannot be empty.");
+                }
+
                 oEntry.EntryUom = this.getView().byId("iUom").getValue();
+                var oInput5 = this.getView().byId(this.getView().createId("iUom"));
+                if (!oEntry.EntryUom) {
+                    oInput5.setValueState(sap.ui.core.ValueState.Error);
+                    oInput5.setValueStateText("Unit field cannot be empty.");
+                }
+
                 oEntry.MoveStloc = this.getView().byId("iToSloc").getValue();
+                var oInput6 = this.getView().byId(this.getView().createId("iToSloc"));
+                if (!oEntry.MoveStloc) {
+                    oInput6.setValueState(sap.ui.core.ValueState.Error);
+                    oInput6.setValueStateText("To Storage location field cannot be empty.");
+                }
 
                 oModel.create("/gmt311Set", oEntry, {
                     method: "POST",
@@ -149,26 +183,29 @@ sap.ui.define([
                         var hdrMessageObject = JSON.parse(hdrMessage);
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
                         MessageToast.show(hdrMessageObject.message, {
-                            duration: 5000                     
+                            duration: 5000
                         });
-                        
-                       var messageProc = sap.ui.getCore().getMessageManager();
-                      messageProc.removeAllMessages();  
+
+                        var messageProc = sap.ui.getCore().getMessageManager();
+                        messageProc.removeAllMessages();
                     }.bind(this),
                     error: function (oResponse) {
                         var errMessage = oResponse.headers["sap-message"];
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+                        if( oEntry.Material){
                         MessageBox.error(
                             "Error occured. Please see the Message Popover", {
                             styleClass: bCompact ? "sapUiSizeCompact" : ""
                         }
                         );
+                    }
                     }.bind(this)
                 });
                 this.onClear();
             },
             onChange: function (oEvent) {
-
+                var messageProc = sap.ui.getCore().getMessageManager();
+                messageProc.removeAllMessages();
                 if (oEvent) {
                     var oInput = oEvent.getSource();
                     var oValue = oInput.getValue();
@@ -178,43 +215,43 @@ sap.ui.define([
                 }
 
                 if (oValue) {
-                    var oModSloc = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
-                    //Get the view for table        
-                    var iTab = this.getView().byId("iTab");
-                    oModSloc.read("/slocSet('" + oValue + "')/sLocNav", {
-                        success: function (oData) {
-                            var oInput = this.getView().byId(this.getView().createId("iMatnr"));
-                            if (!oData.results.length) {
-                                var oInput = this.getView().byId(this.getView().createId("iMatnr"));
-                                oInput.setValueState(sap.ui.core.ValueState.Error);
-                                oInput.setValueStateText("Material not present in plant.");
-                                this.byId("Mat_desc").setText(null);
-                            } else {
-                                oInput.setValueState(sap.ui.core.ValueState.Success);
-                            }
-                            var oJSONModel = new sap.ui.model.json.JSONModel(oData);
-                            this._oView.setModel(oJSONModel, "SLOC");
-                            var oMetadata = oJSONModel.getMetadata();
-                            //Set Model                                                   
-                            this._oView.setModel(oJSONModel, "Results");
-                            this.byId("Mat_desc").setText(oData.results[0].Maktx);
-                            this.byId("iUom").setValue(oData.results[0].Meins);
-                            this.byId("iUom").setEnabled(false)
 
+                    var oMod = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
+                    oMod.read("/slocSet('" + oValue + "')", {
+                        success: function (odata) {
+                            var oInput = this.getView().byId(this.getView().createId("iMatnr"));
+                            oInput.setValueState(sap.ui.core.ValueState.Success); 
+                            this.byId("Mat_desc").setText(odata.Maktx);
+                            this.byId("iUom").setValue(odata.Meins);
+                            this.byId("iUom").setEnabled(false)
+                            var oView = this.getView();
+                            this.sLoc(oValue, oView);
+                            this.setState();
                         }.bind(this),
                         error: function (oResponse) {
-                            var bCompact = !!oViewM.$().closest(".sapUiSizeCompact").length;
-                            MessageBox.error(
-                                errorDetails, {
-                                styleClass: bCompact ? "sapUiSizeCompact" : ""
-                            }
-                            );
+                            var messageProc = sap.ui.getCore().getMessageManager();
+                            messageProc.removeAllMessages();
+                            oInput.setValueState(sap.ui.core.ValueState.Error);
+                            oInput.setValueStateText("Material not present in plant.");
+                            this.byId("Mat_desc").setText(null);
                         }.bind(this)
                     });
-                    iTab.setVisible(true);
+
                 }
             },
-
+            sLoc: function (oValue, oView) {
+                var oModSloc = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
+                //Get the view for table        
+                var iTab = this.getView().byId("iTab");
+                oModSloc.read("/slocSet('" + oValue + "')/sLocNav", {
+                    success: function (oData) {
+                        var oJSONModel = new sap.ui.model.json.JSONModel(oData);
+                        // var oView = this.getView().
+                        oView.setModel(oJSONModel, "Results");
+                    }
+                });
+                iTab.setVisible(true);
+            },
             onSearchHelp: function (oEvent) {
                 //This code was generated by the layout editor.
                 var skip = 0; // Start pointing of record
@@ -293,6 +330,19 @@ sap.ui.define([
                 }
                 oEvent.getSource().getBinding("items").filter([]);
 
+            },
+            setState: function(){
+
+                 var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
+                 oInput1.setValueState(sap.ui.core.ValueState.None);
+                 var oInput2 = this.getView().byId(this.getView().createId("iFromSloc"));
+                 oInput2.setValueState(sap.ui.core.ValueState.None);
+                 var oInput3 = this.getView().byId(this.getView().createId("iToSloc"));
+                 oInput3.setValueState(sap.ui.core.ValueState.None);
+                 var oInput4 = this.getView().byId(this.getView().createId("iQuant"));
+                 oInput4.setValueState(sap.ui.core.ValueState.None);
+                 var oInput5 = this.getView().byId(this.getView().createId("iUom"));
+                 oInput5.setValueState(sap.ui.core.ValueState.None);
             }
 
 
