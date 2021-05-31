@@ -5,18 +5,17 @@ sap.ui.define([
     "sap/ui/model/BindingMode",
     "sap/ui/core/message/Message",
     "sap/m/MessageBox",
-    'sap/m/MessageToast'
-
+    'sap/m/MessageToast',
+    'sap/ui/core/BusyIndicator'
 ],
 	/**
 	 * @param {typeof sap.ui.core.mvc.Controller} Controller
 	 */
-    function (Controller, MessagePopover, JSONModel, BindingMode, Message, MessageBox, MessageToast) {
+    function (Controller, MessagePopover, JSONModel, BindingMode, Message, MessageBox, MessageToast,BusyIndicator) {
         "use strict";
         var oMessageManager, oModelM, oViewM, oMaterialInput, oPlant;
         return Controller.extend("ns.project1.controller.View1", {
             onInit: function () {
-
                 this._oView = this.getView();
 
                 oViewM = this.getView();
@@ -38,18 +37,15 @@ sap.ui.define([
                 oViewM.setModel(oModelM);
             },
             onBeforeRendering: function () {
-
                 var oPlant = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
                 oPlant.read("/gmt311Set", {
                     success: function (oData, oResponse) {
-
                         var oMeta = oPlant.getServiceMetadata();
                         var headerFields = "";
                         var field;
                         for (var i = 0; i < oMeta.dataServices.schema[0].entityType[0].property.length; i++) {
                             var property = oMeta.dataServices.schema[0].entityType[0].property[i];
                             field = property.name;
-
                             var extensions = property.extensions;
                             for (var a = 0; a < extensions.length; a++) {
                                 var field1 = extensions[a].name;
@@ -72,16 +68,12 @@ sap.ui.define([
                                     }
                                 }
                             }
-
                         }
-
-
                         var data = oData.results[0];
                         this._oView.byId("iPlant").setValue(data.Plant);
                         this._oView.byId("iPlant").setEnabled(false);
                     }.bind(this),
                     error: function (oResponse) {
-
                         MessageBox.error(
                             "Defalt Plant NOt Found.", {
                             styleClass: bCompact ? "sapUiSizeCompact" : ""
@@ -128,18 +120,18 @@ sap.ui.define([
                 oModel1.getModel("message").setData(null);
                 this.getView().byId("logs").setVisible(false);
                  this.setState();
-
             },
             onPost: function (oEvent) {
+                this.showBusyIndicator(2000, 0);
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
                 oModel.setUseBatch(false);
                 var oEntry = {};
 
-                oEntry.Plant = this.getView().byId("iPlant").getValue();
-                oEntry.Material = this.getView().byId("iMatnr").getValue();
-                oEntry.StgeLoc = this.getView().byId("iFromSloc").getValue();
-                oEntry.EntryQnt = this.getView().byId("iQuant").getValue();
-                oEntry.EntryUom = this.getView().byId("iUom").getValue();
+                oEntry.Plant     = this.getView().byId("iPlant").getValue();
+                oEntry.Material  = this.getView().byId("iMatnr").getValue();
+                oEntry.StgeLoc   = this.getView().byId("iFromSloc").getValue();
+                oEntry.EntryQnt  = this.getView().byId("iQuant").getValue();
+                oEntry.EntryUom  = this.getView().byId("iUom").getValue();
                 oEntry.MoveStloc = this.getView().byId("iToSloc").getValue();
 
                 this.onValidate(oEntry);       // Validate fields 
@@ -232,7 +224,6 @@ sap.ui.define([
                             this.byId("Mat_desc").setText(null);
                         }.bind(this)
                     });
-
                 }
             },
             sLoc: function (oValue, oView) {
@@ -325,10 +316,8 @@ sap.ui.define([
                     oInput.setValueState(sap.ui.core.ValueState.None);
                 }
                 oEvent.getSource().getBinding("items").filter([]);
-
             },
             setState: function () {
-
                 var oInput1 = this.getView().byId(this.getView().createId("iMatnr"));
                 oInput1.setValueState(sap.ui.core.ValueState.None);
                 var oInput2 = this.getView().byId(this.getView().createId("iFromSloc"));
@@ -339,8 +328,37 @@ sap.ui.define([
                 oInput4.setValueState(sap.ui.core.ValueState.None);
                 var oInput5 = this.getView().byId(this.getView().createId("iUom"));
                 oInput5.setValueState(sap.ui.core.ValueState.None);
-            }
+            },
+            showBusyIndicator : function (iDuration, iDelay) {
+			BusyIndicator.show(iDelay);
 
+			if (iDuration && iDuration > 0) {
+				if (this._sTimeoutId) {
+					clearTimeout(this._sTimeoutId);
+					this._sTimeoutId = null;
+				}
+
+				this._sTimeoutId = setTimeout(function() {
+					this.hideBusyIndicator();
+				}.bind(this), iDuration);
+			}
+        },
+        	hideBusyIndicator : function() {
+			BusyIndicator.hide();
+        },
+        onSelect: function(oEvent){
+            
+            var oItem = oEvent.getSource().getBindingContext("Results").getObject(); 
+           var Fsloc = this.getView().byId("iFromSloc").getValue();
+           var Tsloc = this.getView().byId("iToSloc").getValue();
+           if(!Fsloc){
+           this.getView().byId("iFromSloc").setValue(oItem.Lgort);
+           }
+           else if(!Tsloc) {
+               this.getView().byId("iToSloc").setValue(oItem.Lgort);
+           }
+                         
+        }
 
         });
     });

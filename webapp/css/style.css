@@ -1,8 +1,6 @@
 /* Enter your custom styles here */
 
-/* th{
-    background-color: #CD2027 !important;
-} */
+
 .sapMColumnHeader{
     padding-top: 10% !important;
 }
@@ -29,9 +27,7 @@ td, th{
     background-color: white !important;
 }
 
-/* .sapMIBar{
-    background-color: #CD2027 !important;
-} */
+
 .sapMTitle{
   font-weight: bold !important;
   /* color: white !important; */
@@ -40,16 +36,6 @@ td, th{
     border-radius: 5px !important;
     border-color: white !important;
 }
-/* .sapMShellBrandingBar{
-    background-color:#CD2027  !important;
-}  */
-/* .sapContrast span.sapMBtnInner.sapMBtnAccept{
-    background-color:#CD2027  !important;
-} */
-
-/* html.sap-desktop:not(.sapUiNativeScrollbars) ::-webkit-scrollbar {
-    background-color: #cd2027;
-} */
 
 .sapMInputBaseContentWrapper{
     border-radius: 5px;
@@ -63,12 +49,6 @@ td, th{
 .sapMSFF{
     border-radius: 12px;
 }
-
-/* .sapMText.sapUiSelectable.sapMTextMaxWidth.sapMColumnHeaderContent{
-    color: white !important;
-    font-weight: bold;
-} */
-
 .sapMListTblRow{
     height: 1.7rem !important;
 }
