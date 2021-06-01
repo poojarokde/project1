@@ -122,11 +122,10 @@ sap.ui.define([
                  this.setState();
             },
             onPost: function (oEvent) {
-                this.showBusyIndicator(2000, 0);
+                this.showBusyIndicator(0);
                 var oModel = new sap.ui.model.odata.v2.ODataModel("sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
                 oModel.setUseBatch(false);
                 var oEntry = {};
-
                 oEntry.Plant     = this.getView().byId("iPlant").getValue();
                 oEntry.Material  = this.getView().byId("iMatnr").getValue();
                 oEntry.StgeLoc   = this.getView().byId("iFromSloc").getValue();
@@ -138,6 +137,7 @@ sap.ui.define([
                 oModel.create("/gmt311Set", oEntry, {
                     method: "POST",
                     success: function (oData, oResponse) {
+                        this.hideBusyIndicator();
                         var hdrMessage = oResponse.headers["sap-message"];
                         var hdrMessageObject = JSON.parse(hdrMessage);
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
