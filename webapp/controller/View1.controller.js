@@ -149,14 +149,15 @@ sap.ui.define([
                          this.onClear();
                     }.bind(this),
                     error: function (oResponse) {
+                        this.hideBusyIndicator();
                         var errMessage = oResponse.headers["sap-message"];
                         var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
                         if (oEntry.Material) {
-                            MessageBox.error(
-                                "Error occured. Please see the Message Popover", {
-                                styleClass: bCompact ? "sapUiSizeCompact" : ""
-                            }
-                            );
+                            // MessageBox.error(
+                            //     "Error occured. Please see the Message Popover", {
+                            //     styleClass: bCompact ? "sapUiSizeCompact" : ""
+                            // }
+                            // );
                         }
                         else{
                         var messageProc = sap.ui.getCore().getMessageManager();
@@ -225,6 +226,7 @@ sap.ui.define([
                         }.bind(this)
                     });
                 }
+                this.getView().byId("iFromSloc").focus();
             },
             sLoc: function (oValue, oView) {
                 var oModSloc = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/YMM_GMT_SRV", true, "", "");
@@ -348,14 +350,16 @@ sap.ui.define([
         },
         onSelect: function(oEvent){
             
-            var oItem = oEvent.getSource().getBindingContext("Results").getObject(); 
+           var oItem = oEvent.getSource().getBindingContext("Results").getObject(); 
            var Fsloc = this.getView().byId("iFromSloc").getValue();
            var Tsloc = this.getView().byId("iToSloc").getValue();
            if(!Fsloc){
            this.getView().byId("iFromSloc").setValue(oItem.Lgort);
+           this.getView().byId("iToSloc").focus();
            }
            else if(!Tsloc) {
                this.getView().byId("iToSloc").setValue(oItem.Lgort);
+               this.getView().byId("iQuant").focus();
            }
                          
         }
